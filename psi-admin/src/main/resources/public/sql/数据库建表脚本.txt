@@ -1,0 +1,729 @@
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for t_user
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user`;
+CREATE TABLE `t_user`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `phone` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `true_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
+  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `is_del` int(11) NULL DEFAULT 0 COMMENT '是否删除',
+  `tx` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注名',
+  `sex` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+
+INSERT INTO t_user(`id`, `user_name`, `password`, `true_name`, `phone`, `sex`, `remarks`, `is_del`, `tx`) VALUES (1, 'admin', '$2a$10$zq26CnvtWq74E/Q9plt4f.Ek10syADd6SgIWMXvg3O.x3y0I3nPo.', '系统管理员', '123456789', '女', '这是系统管理员', 0, '1.jpg');
+INSERT INTO t_user(`id`, `user_name`, `password`, `true_name`, `phone`, `sex`, `remarks`, `is_del`, `tx`) VALUES (2, 'zzh', '$2a$10$zq26CnvtWq74E/Q9plt4f.Ek10syADd6SgIWMXvg3O.x3y0I3nPo.', '钟志浩', '123456789', '男', '除了菜单管理', 0, '1.jpg');
+INSERT INTO t_user(`id`, `user_name`, `password`, `true_name`, `phone`, `sex`, `remarks`, `is_del`, `tx`) VALUES (8, 'syc', '$2a$10$.NWBCN.v7eLNmzYnMQ5KWuSkSlx7FVxv1ug45T11OWXT7.zlX7INi', '石于城', '123456789', '男', '采购管理', 0, NULL);
+INSERT INTO t_user(`id`, `user_name`, `password`, `true_name`, `phone`, `sex`, `remarks`, `is_del`, `tx`) VALUES (9, 'wzb', '$2a$10$Udh.EbcLqIIjlBr9hR2gmuvRvtlWweorfoNet7fIVDD2L0dwMsxzS', '韦治邦', '123456789', '男', '销售管理', 0, NULL);
+INSERT INTO t_user(`id`, `user_name`, `password`, `true_name`, `phone`, `sex`, `remarks`, `is_del`, `tx`) VALUES (13, 'szb', '$2a$10$RltqXOMSOZUohEYvbGuOt.xkFHNLD8uSgPWY1CWNmDKKKCa4d2H7K', '史正斌', '123456789', '男', '库存基础资料管理', 0, NULL);
+INSERT INTO t_user(`id`, `user_name`, `password`, `true_name`, `phone`, `sex`, `remarks`, `is_del`, `tx`) VALUES (14, 'mcr', '$2a$10$eDGrp3jKyX/M.zZlcO3KA.SNVgfdHTogybSSRoaMzvTUs8Igez1y6', '马成仁', '123456789', '男', '测试表单', 0, NULL);
+
+ 
+
+-- ----------------------------
+-- Table structure for persistent_logins
+-- ----------------------------
+DROP TABLE IF EXISTS `persistent_logins`;
+CREATE TABLE `persistent_logins`  (
+  `username` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `series` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `last_used` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`series`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic; 
+
+
+
+-- ----------------------------
+-- Table structure for t_role
+-- ----------------------------
+DROP TABLE IF EXISTS `t_role`;
+CREATE TABLE `t_role`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `bz` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `is_del` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
+
+INSERT INTO t_role(`id`, `bz`, `name`, `remarks`, `is_del`) VALUES (10, '系统管理员，最高权限', '系统管理员', '最高权限', 0);
+INSERT INTO t_role(`id`, `bz`, `name`, `remarks`, `is_del`) VALUES (11, '主管', '主管', '拥有除菜单管理的全部功能', 0);
+INSERT INTO t_role(`id`, `bz`, `name`, `remarks`, `is_del`) VALUES (12, '负责采购', '采购', '进货管理', 0);
+INSERT INTO t_role(`id`, `bz`, `name`, `remarks`, `is_del`) VALUES (13, '负责销售', '销售', '销售管理', 0);
+INSERT INTO t_role(`id`, `bz`, `name`, `remarks`, `is_del`) VALUES (14, '负责库存', '库存', '库存管理', 0);
+INSERT INTO t_role(`id`, `bz`, `name`, `remarks`, `is_del`) VALUES (15, '负责基础资料', '资料管理员', '基础资料', 0);
+
+
+-- ----------------------------
+-- Table structure for t_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_role`;
+CREATE TABLE `t_user_role`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `role_id` int(11) NULL DEFAULT NULL COMMENT '角色id',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKa9c8iiy6ut0gnx491fqx4pxam`(`role_id`) USING BTREE,
+  INDEX `FKq5un6x7ecoef5w1n39cop66kl`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色表' ROW_FORMAT = Dynamic;
+
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (42, 10, 1);
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (43, 11, 1);
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (49, 14, 13);
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (50, 15, 13);
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (51, 13, 9);
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (52, 12, 8);
+INSERT INTO t_user_role(`id`, `role_id`, `user_id`) VALUES (53, 11, 2);
+
+
+-- ----------------------------
+-- Table structure for t_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `t_menu`;
+CREATE TABLE `t_menu`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
+  `state` int(11) NULL DEFAULT NULL COMMENT '节点类型',
+  `url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单url',
+  `p_id` int(11) NULL DEFAULT NULL COMMENT '上级菜单id',
+  `acl_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限码',
+  `grade` int(255) NULL DEFAULT NULL COMMENT '菜单层级',
+  `is_del` int(11) NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKsni20f28wjqrmpp44uawa2ky4`(`p_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
+
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (1, 'menu-1', '系统菜单', 1, '/', -1, '9999', -1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (2, 'menu-2', '系统设置', 0, '', 1, '10', 0, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (3, 'menu-3', '用户管理', 0, '/user/index', 2, '1010', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (4, 'menu-4', '角色管理', 0, '/role/index', 2, '1020', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (5, 'menu-5', '密码修改', 0, '/user/toPasswordPage', 2, '101001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (6, 'menu-6', '安全退出', 0, '/signout', 2, '101002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (7, NULL, '用户列表查询', 0, NULL, 3, '101003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (8, NULL, '用户添加', 0, NULL, 3, '101004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (9, NULL, '用户更新', 0, NULL, 3, '101005', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (10, NULL, '用户删除', 0, NULL, 3, '101006', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (11, NULL, '角色列表查询', 0, NULL, 4, '102001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (12, NULL, '角色添加', 0, NULL, 4, '102002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (13, NULL, '角色更新', 0, NULL, 4, '102003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (14, NULL, '角色删除', 0, NULL, 4, '102004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (15, NULL, '角色授权', 0, NULL, 4, '102005', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (22, NULL, '菜单管理', 0, '/menu/index', 2, '1030', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (23, NULL, '菜单添加', 0, NULL, 22, '103001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (24, NULL, '菜单查询', 0, NULL, 22, '103002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (25, NULL, '菜单更新', 0, NULL, 22, '103003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (26, NULL, '菜单删除', 0, NULL, 22, '103004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (27, NULL, '基础资料', 0, NULL, 1, '20', 0, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (28, NULL, '供应商管理', 0, '/supplier/index', 27, '2010', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (29, NULL, '供应商列表查询', 0, NULL, 28, '2010001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (30, NULL, '供应商添加', 0, NULL, 28, '2010002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (31, NULL, '供应商更新', 0, NULL, 28, '2010003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (32, NULL, '供应商删除', 0, NULL, 28, '2010004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (33, NULL, '客户管理', 0, '/customer/index', 27, '2020', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (34, NULL, '客户列表查询', 0, NULL, 33, '2020001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (35, NULL, '客户添加', 0, NULL, 33, '2020002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (36, NULL, '客户更新', 0, NULL, 33, '2020003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (37, NULL, '客户删除', 0, NULL, 33, '2020004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (38, NULL, '商品管理', 0, '/goods/index', 27, '2030', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (39, NULL, '商品列表查询', 0, NULL, 38, '2030001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (40, NULL, '商品添加', 0, NULL, 38, '2030002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (43, NULL, '商品更新', 0, NULL, 38, '2030003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (44, NULL, '商品删除', 0, NULL, 38, '2030004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (45, NULL, '商品分类管理', 0, '/goodsType/index', 27, '2040', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (46, NULL, '商品分类列表查询', 0, NULL, 45, '2040001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (47, NULL, '商品分类添加', 0, NULL, 45, '2040002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (48, NULL, '商品分类更新', 0, NULL, 45, '2040003', 2, 1);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (49, NULL, '商品分类删除', 0, NULL, 45, '2040004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (50, NULL, '商品单位管理', 0, '/goodsUnit/index', 27, '2050', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (51, NULL, '商品单位列表查询', 0, '', 50, '2050001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (52, NULL, '商品单位添加', 0, NULL, 50, '2050002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (53, NULL, '商品单位更新', 0, NULL, 50, '2050003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (54, NULL, '商品单位删除', 0, NULL, 50, '2050004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (55, NULL, '期初库存', 0, '/stock/index', 27, '2060', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (56, NULL, '商品信息搜索', 0, NULL, 55, '2060001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (57, NULL, '商品添加到仓库', 0, NULL, 55, '2060002', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (58, NULL, '期初库存搜索', 0, NULL, 55, '2060003', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (59, NULL, '修改期初库存', 0, NULL, 55, '2060004', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (60, NULL, '删除期初库存', 0, NULL, 55, '2060005', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (61, NULL, '进货管理', 0, NULL, 1, '30', 0, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (62, NULL, '进货入库', 0, '/purchase/index', 61, '3010', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (64, NULL, '退货出库', 0, '/return/index', 61, '3020', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (65, NULL, '进货单据查询', 0, '/purchase/searchPage', 61, '3030', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (66, NULL, '退货单据查询', 0, '/return/searchPage', 61, '3040', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (67, NULL, '销售管理', 0, NULL, 1, '40', 0, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (68, NULL, '销售出库', 0, '/sale/index', 67, '4010', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (69, NULL, '客户退货', 0, '/customerReturn/index', 67, '4020', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (70, NULL, '销售单据查询', 0, '/sale/searchPage', 67, '4030', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (71, NULL, '客户退货查询', 0, '/customerReturn/searchPage', 67, '4040', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (72, NULL, '库存管理', 0, NULL, 1, '50', 0, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (73, NULL, '商品报损', 0, '/damage/index', 72, '5010', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (74, NULL, '商品报溢', 0, '/overflow/index', 72, '5020', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (75, NULL, '库存报警', 0, '/common/alarmPage', 72, '5030', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (76, NULL, '报溢报损', 0, '/common/toDamageOverflowSearchPage', 72, '5040', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (77, NULL, '当前库存查询', 0, '/common/toGoodsStockPage', 72, '5050', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (78, NULL, '统计报表', 0, NULL, 1, '60', 0, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (79, NULL, '供应商统计', 0, '/report/countSupplier', 78, '6010', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (80, NULL, '客户统计', 0, '/report/countCustomer', 78, '6020', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (81, NULL, '商品采购统计', 0, '/report/countPurchase', 78, '6030', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (82, NULL, '商品销售统计', 0, '/report/countSale', 78, '6040', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (83, NULL, '按日统计', 0, '/report/countDaySale', 78, '6050', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (84, NULL, '按月统计', 0, '/report/countMonthSale', 78, '6060', 1, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (85, NULL, '进货单据删除', 0, NULL, 65, '3030001', 2, 0);
+INSERT INTO t_menu(`id`, `icon`, `name`, `state`, `url`, `p_id`, `acl_value`, `grade`, `is_del`) VALUES (86, NULL, '进货单据审核', 0, NULL, 65, '3030002', 2, 0);
+
+
+
+-- ----------------------------
+-- Table structure for t_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `t_role_menu`;
+CREATE TABLE `t_role_menu`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `menu_id` int(11) NULL DEFAULT NULL COMMENT '菜单id',
+  `role_id` int(11) NULL DEFAULT NULL COMMENT '角色id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKsonb0rbt2u99hbrqqvv3r0wse`(`role_id`) USING BTREE,
+  INDEX `FKhayg4ib6v7h1wyeyxhq6xlddq`(`menu_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 148 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单表' ROW_FORMAT = Dynamic;
+
+
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1698, 1, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1699, 2, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1700, 3, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1701, 7, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1702, 8, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1703, 9, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1704, 10, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1705, 4, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1706, 11, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1707, 12, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1708, 13, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1709, 14, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1710, 15, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1711, 5, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1712, 6, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1713, 22, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1714, 23, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1715, 24, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1716, 25, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1717, 26, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1718, 27, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1719, 28, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1720, 29, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1721, 30, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1722, 31, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1723, 32, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1724, 33, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1725, 34, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1726, 35, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1727, 36, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1728, 37, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1729, 38, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1730, 39, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1731, 40, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1732, 43, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1733, 44, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1734, 45, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1735, 46, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1736, 47, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1737, 49, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1738, 50, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1739, 51, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1740, 52, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1741, 53, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1742, 54, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1743, 55, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1744, 56, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1745, 57, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1746, 58, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1747, 59, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1748, 60, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1749, 61, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1750, 62, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1751, 64, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1752, 65, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1753, 66, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1754, 67, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1755, 68, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1756, 69, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1757, 70, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1758, 71, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1759, 72, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1760, 73, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1761, 74, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1762, 75, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1763, 76, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1764, 77, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1765, 78, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1766, 79, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1767, 80, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1768, 81, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1769, 82, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1770, 83, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (1771, 84, 10);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3221, 1, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3222, 2, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3223, 3, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3224, 7, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3225, 8, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3226, 9, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3227, 10, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3228, 4, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3229, 11, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3230, 12, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3231, 13, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3232, 14, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3233, 15, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3234, 5, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3235, 6, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3236, 27, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3237, 28, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3238, 29, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3239, 32, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3240, 33, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3241, 34, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3242, 38, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3243, 39, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3244, 45, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3245, 46, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3246, 50, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3247, 51, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3248, 55, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3249, 56, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3250, 58, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3251, 61, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3252, 62, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3253, 64, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3254, 65, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3255, 66, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3256, 67, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3257, 68, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3258, 69, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3259, 70, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3260, 71, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3261, 72, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3262, 73, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3263, 74, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3264, 75, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3265, 76, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3266, 77, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3267, 78, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3268, 79, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3269, 80, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3270, 81, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3271, 82, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3272, 83, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3273, 84, 11);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3274, 1, 12);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3275, 61, 12);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3276, 62, 12);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3277, 64, 12);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3278, 65, 12);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3279, 66, 12);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3280, 1, 13);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3281, 67, 13);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3282, 68, 13);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3283, 69, 13);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3284, 70, 13);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3285, 71, 13);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3286, 1, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3287, 72, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3288, 73, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3289, 74, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3290, 75, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3291, 76, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3292, 77, 14);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3293, 1, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3294, 27, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3295, 28, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3296, 29, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3297, 30, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3298, 31, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3299, 32, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3300, 33, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3301, 34, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3302, 35, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3303, 36, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3304, 37, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3305, 38, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3306, 39, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3307, 40, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3308, 43, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3309, 44, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3310, 45, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3311, 46, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3312, 47, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3313, 49, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3314, 50, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3315, 51, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3316, 52, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3317, 53, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3318, 54, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3319, 55, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3320, 56, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3321, 57, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3322, 58, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3323, 59, 15);
+INSERT INTO t_role_menu(`id`, `menu_id`, `role_id`) VALUES (3324, 60, 15);
+
+
+-- ----------------------------
+-- Table structure for t_supplier
+-- ----------------------------
+DROP TABLE IF EXISTS `t_supplier`;
+CREATE TABLE `t_supplier`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `address` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系地址',
+  `contact` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '供应商名称',
+  `phone` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `is_del` int(11) NULL DEFAULT NULL COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供应商表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_customer
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer`;
+CREATE TABLE `t_customer`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `address` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户地址',
+  `contact` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户名称',
+  `phone` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户联系电话',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `is_del` int(11) NULL DEFAULT NULL COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '客户表' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_goods`;
+CREATE TABLE `t_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `inventory_quantity` int(11) NOT NULL COMMENT '库存数量',
+  `min_num` int(11) NOT NULL COMMENT '库存下限',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `producer` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生产产商',
+  `purchasing_price` float NOT NULL COMMENT '采购价格',
+  `average` float NULL COMMENT '成本均价',
+  `amount` float NULL COMMENT '库存总金额',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `selling_price` float NOT NULL COMMENT '出售价格',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品单位',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别',
+  `state` int(11) NOT NULL COMMENT '商品状态',
+  `last_purchasing_price` float NOT NULL COMMENT '上次采购价格',
+  `is_del` int(11) NULL DEFAULT NULL COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKlxnna5ngumghp4f279mmbjtyo`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_goods_type
+-- ----------------------------
+DROP TABLE IF EXISTS `t_goods_type`;
+CREATE TABLE `t_goods_type`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类别名',
+  `p_id` int(11) NULL DEFAULT NULL COMMENT '父级类别id',
+  `state` int(11) NULL DEFAULT NULL COMMENT '节点类型',
+  `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '节点图标',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品类别表' ROW_FORMAT = Dynamic;
+
+INSERT INTO `t_goods_type` VALUES (1, '所有类别', -1, 1, 'icon-folderOpen');
+
+
+-- ----------------------------
+-- Table structure for t_goods_unit
+-- ----------------------------
+DROP TABLE IF EXISTS `t_goods_unit`;
+CREATE TABLE `t_goods_unit`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位名',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品单位表' ROW_FORMAT = Dynamic;
+
+INSERT INTO `t_goods_unit` VALUES (1, '个');
+INSERT INTO `t_goods_unit` VALUES (2, '袋');
+INSERT INTO `t_goods_unit` VALUES (3, '盒');
+INSERT INTO `t_goods_unit` VALUES (4, '箱');
+INSERT INTO `t_goods_unit` VALUES (5, '台');
+INSERT INTO `t_goods_unit` VALUES (6, '包');
+INSERT INTO `t_goods_unit` VALUES (11, '件');
+INSERT INTO `t_goods_unit` VALUES (12, '条');
+INSERT INTO `t_goods_unit` VALUES (13, '瓶');
+
+-- ----------------------------
+-- Table structure for t_purchase_list
+-- ----------------------------
+DROP TABLE IF EXISTS `t_purchase_list`;
+CREATE TABLE `t_purchase_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `amount_paid` float NOT NULL COMMENT '实付金额',
+  `amount_payable` float NOT NULL COMMENT '应付金额',
+  `purchase_date` datetime(0) NULL DEFAULT NULL COMMENT '进货日期',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `state` int(11) NOT NULL COMMENT '交易状态',
+  `purchase_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '进货单号',
+  `supplier_id` int(11) NULL DEFAULT NULL COMMENT '供应商',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '操作用户',
+  `check_state` int(11) NOT NULL COMMENT '订单审核状态',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FK5j2dev8b2b5d0l69nb8vtr4yb`(`supplier_id`) USING BTREE,
+  INDEX `FK69s6eyxr4wwvsywe9hbthef1h`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '进货单' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_purchase_list_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_purchase_list_goods`;
+CREATE TABLE `t_purchase_list_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `num` int(11) NOT NULL COMMENT '数量',
+  `price` float NOT NULL COMMENT '单价',
+  `total` float NOT NULL COMMENT '总价',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品单位',
+  `purchase_list_id` int(11) NULL DEFAULT NULL COMMENT '进货单id',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别',
+  `goods_id` int(11) NULL DEFAULT NULL COMMENT '商品id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKfvdvgcebqkkokyn0o00idqnpy`(`purchase_list_id`) USING BTREE,
+  INDEX `FK83ikbi2x3epn49fwcco8jlfwu`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 58 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '进货单商品表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_return_list
+-- ----------------------------
+DROP TABLE IF EXISTS `t_return_list`;
+CREATE TABLE `t_return_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `amount_paid` float NOT NULL COMMENT '实付金额',
+  `amount_payable` float NOT NULL COMMENT '应付金额',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `return_date` datetime(0) NULL DEFAULT NULL COMMENT '退货日期',
+  `return_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退货单号',
+  `state` int(11) NOT NULL COMMENT '交易状态',
+  `supplier_id` int(11) NULL DEFAULT NULL COMMENT '供应商',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '操作用户',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FK4qxjj8bvj2etne243xluni0vn`(`supplier_id`) USING BTREE,
+  INDEX `FK904juw2v1hm2av0ig26gae9jb`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '退货单表' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_return_list_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_return_list_goods`;
+CREATE TABLE `t_return_list_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `num` int(11) NOT NULL COMMENT '数量',
+  `price` float NOT NULL COMMENT '单价',
+  `total` float NOT NULL COMMENT '总价',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `return_list_id` int(11) NULL DEFAULT NULL COMMENT '退货单id',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别',
+  `goods_id` int(11) NULL DEFAULT NULL COMMENT '商品id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKemclu281vyvyk063c3foafq1w`(`return_list_id`) USING BTREE,
+  INDEX `FKa1prpd96fcs0x2oe0omny9vio`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '退货单商品表' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_sale_list
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sale_list`;
+CREATE TABLE `t_sale_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `amount_paid` float NOT NULL COMMENT '实付金额',
+  `amount_payable` float NOT NULL COMMENT '应付金额',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `sale_date` datetime(0) NULL DEFAULT NULL COMMENT '销售日期',
+  `sale_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '销售单号',
+  `state` int(11) NULL DEFAULT NULL COMMENT '交易状态',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '操作用户',
+  `customer_id` int(11) NULL DEFAULT NULL COMMENT '客户id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FK34bnujemrdqimbhg133enp8k8`(`user_id`) USING BTREE,
+  INDEX `FKox4qfs87eu3fvwdmrvelqhi8e`(`customer_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '销售单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_sale_list_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sale_list_goods`;
+CREATE TABLE `t_sale_list_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `num` int(11) NOT NULL COMMENT '数量',
+  `price` float NOT NULL COMMENT '单价',
+  `total` float NOT NULL COMMENT '总价',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `sale_list_id` int(11) NULL DEFAULT NULL COMMENT '销售单',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别',
+  `goods_id` int(11) NULL DEFAULT NULL COMMENT '商品id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FK20ehd6ta9geyql4hxtdsnhbox`(`sale_list_id`) USING BTREE,
+  INDEX `FKn9i5p1d8f0gek5x7q45cq8ibw`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '销售单商品表' ROW_FORMAT = Dynamic;
+
+
+
+-- ----------------------------
+-- Table structure for t_customer_return_list
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_return_list`;
+CREATE TABLE `t_customer_return_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `amount_paid` float NOT NULL COMMENT '实付金额',
+  `amount_payable` float NOT NULL COMMENT '应付金额',
+  `customer_return_date` datetime(0) NULL DEFAULT NULL COMMENT '退货日期',
+  `customer_return_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退货单号',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `state` int(11) NULL DEFAULT NULL COMMENT '交易状态',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '操作用户',
+  `customer_id` int(11) NULL DEFAULT NULL COMMENT '客户id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKd55ju83f0ntixagdvdrsmw10c`(`user_id`) USING BTREE,
+  INDEX `FKl0ahdwa8slkocbfe57opembfx`(`customer_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '客户退货单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_customer_return_list_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_return_list_goods`;
+CREATE TABLE `t_customer_return_list_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `num` int(11) NOT NULL COMMENT '数量',
+  `price` float NOT NULL COMMENT '价格',
+  `total` float NOT NULL COMMENT '总价',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `customer_return_list_id` int(11) NULL DEFAULT NULL COMMENT '客户退货id',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别',
+  `goods_id` int(11) NULL DEFAULT NULL COMMENT '商品id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKtqt67mbn96lxn8hvtl4piblhi`(`customer_return_list_id`) USING BTREE,
+  INDEX `FK4sm5si4swbj3gae46jfk441yx`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '客户退货单商品表' ROW_FORMAT = Dynamic;
+
+
+
+-- ----------------------------
+-- Table structure for t_damage_list
+-- ----------------------------
+DROP TABLE IF EXISTS `t_damage_list`;
+CREATE TABLE `t_damage_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `damage_date` datetime(0) NULL DEFAULT NULL COMMENT '报损日期',
+  `damage_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '报损单号',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '操作用户id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKpn094ma69sch1icjc2gu7xus`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '报损单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_damage_list_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_damage_list_goods`;
+CREATE TABLE `t_damage_list_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `num` int(11) NOT NULL COMMENT '数量',
+  `price` float NOT NULL COMMENT '价格',
+  `total` float NOT NULL COMMENT '总价',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `damage_list_id` int(11) NULL DEFAULT NULL COMMENT '报损单id',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别id',
+  `goods_id` int(11) NULL DEFAULT NULL COMMENT '商品id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKbf5m8mm3gctrnuubr9xkjamj8`(`damage_list_id`) USING BTREE,
+  INDEX `FKdbdfmp09hlf2raktincwroe9n`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '报损单商品表' ROW_FORMAT = Dynamic;
+
+
+
+-- ----------------------------
+-- Table structure for t_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_log`;
+CREATE TABLE `t_log`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `time` datetime(0) NULL DEFAULT NULL,
+  `type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `user_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKbvn5yabu3vqwvtjoh32i9r4ip`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3226 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_overflow_list
+-- ----------------------------
+DROP TABLE IF EXISTS `t_overflow_list`;
+CREATE TABLE `t_overflow_list`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `overflow_date` datetime(0) NULL DEFAULT NULL COMMENT '报溢日期',
+  `overflow_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '报溢单号',
+  `remarks` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '操作用户id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FK3bu8hj2xniqwbrtg6ls6b8ej2`(`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '报溢单表' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for t_overflow_list_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `t_overflow_list_goods`;
+CREATE TABLE `t_overflow_list_goods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编码',
+  `model` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '型号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名',
+  `num` int(11) NOT NULL COMMENT '数量',
+  `price` float NOT NULL COMMENT '价格',
+  `total` float NOT NULL COMMENT '总价',
+  `unit` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `overflow_list_id` int(11) NULL DEFAULT NULL COMMENT '报溢单id',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '商品类别id',
+  `goods_id` int(11) NULL DEFAULT NULL COMMENT '商品id',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `FKd3s9761mgl456tn2xb0d164h7`(`overflow_list_id`) USING BTREE,
+  INDEX `FK8t46iik5kpciki8fnqtiuq5q3`(`type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '报溢单商品表' ROW_FORMAT = Dynamic;
+
+
