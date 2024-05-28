@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzh.admin.mapper.RoleMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zzh.admin.pojo.RoleMenu">
+        <id column="id" property="id" />
+        <result column="menu_id" property="menuId" />
+        <result column="role_id" property="roleId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, menu_id, role_id
+    </sql>
+    <!-- 查询角色拥有的菜单，用于树勾选 -->
+    <select id="queryRoleHasAllMenusByRoleId" resultType="java.lang.Integer">
+        SELECT
+            menu_id
+        FROM
+            t_role_menu
+        WHERE
+            role_id =#{roleId}
+    </select>
+    <!-- 查询角色拥有的权限码，用于权限校验 -->
+    <select id="findAuthoritiesByRoleName" resultType="java.lang.String">
+        SELECT DISTINCT
+        m.acl_value
+        FROM
+        t_role_menu rm
+        LEFT JOIN t_menu m ON rm.menu_id = m.id
+        LEFT JOIN t_role r ON rm.role_id = r.id
+        WHERE
+        m.is_del = 0
+          <if test="list != null and list.size()>0">
+        AND r.NAME IN
+        <foreach collection="list" item="roleName" open="(" separator="," close=")">
+            #{roleName}
+        </foreach>
+          </if>
+    </select>
+
+</mapper>
